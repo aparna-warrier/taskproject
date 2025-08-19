@@ -1,0 +1,91 @@
+{% extends "links/base.html" %}
+
+{% block title %}Create Short URL{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title mb-3">Shorten your URL</h4>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.original_url.id_for_label }}">Long URL</label>
+            {{ form.original_url }}
+            {% for e in form.original_url.errors %}
+              <div class="text-danger small">{{ e }}</div>
+            {% endfor %}
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.custom_code.id_for_label }}">Custom code (optional)</label>
+            {{ form.custom_code }}
+            <div class="form-text">Only letters, numbers, - and _ allowed</div>
+            {% for e in form.custom_code.errors %}
+              <div class="text-danger small">{{ e }}</div>
+            {% endfor %}
+          </div>
+          <button class="btn btn-primary" type="submit">Shorten</button>
+        </form>
+      </div>
+    </div>
+
+    {% if short_obj %}
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Your short link</h5>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <input id="shortLink" class="form-control w-auto" value="{{ short_link }}" readonly>
+          
+          <a class="btn btn-outline-primary btn-sm" href="{{ short_link }}" target="_blank" rel="noopener">Open</a>
+          <a class="btn btn-outline-info btn-sm" href="{% url 'links:stats' short_obj.short_code %}">Stats</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">Recent Links</h5>
+        {% if recent %}
+          <ul class="list-group">
+            {% for r in recent %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <code>{{ r.short_code }}</code> →
+                  <a href="{% url 'links:follow' r.short_code %}" target="_blank" rel="noopener">
+                    {{ request.build_absolute_uri|slice:"://" }}{% url 'links:follow' r.short_code %}
+                  </a>
+                </div>
+                <span class="badge bg-secondary">{{ r.clicks }} clicks</span>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="text-muted">No links yet. Create your first one!</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const btn = document.getElementById('copyBtn');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      const input = document.getElementById('shortLink');
+      input.select();
+      input.setSelectionRange(0, 99999);
+      try {
+        await navigator.clipboard.writeText(input.value);
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1200);
+      } catch(e) {
+        alert('Copy failed. Manually copy the URL.');
+      }
+    });
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'links/base.html' %}
+{% block title %}Stats • {{ obj.short_code }}{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h1>Stats for <code>{{ obj.short_code }}</code></h1>
+  <p><strong>Short link:</strong> <a href="{{ short_link }}" target="_blank" rel="noopener">{{ short_link }}</a></p>
+  <p><strong>Destination:</strong> <a href="{{ obj.original_url }}" target="_blank" rel="noopener">{{ obj.original_url }}</a></p>
+  <p><strong>Total clicks:</strong> {{ obj.clicks }}</p>
+  <p><strong>Created at:</strong> {{ obj.created_at }}</p>
+</section>
+<a class="btn" href="{% url 'links:home' %}">Create another</a>
+{% endblock %}
