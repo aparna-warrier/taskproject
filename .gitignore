@@ -1,0 +1,50 @@
+# ---- Python / Django ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+*.egg
+*.log
+*.pot
+*.pyproject
+pip-wheel-metadata/
+
+# SQLite (local dev only)
+db.sqlite3
+
+# Virtual envs & local env files
+venv/
+.env
+.env.*         # e.g. .env.local
+.venv/
+env/
+ENV/
+
+# Django: collected static & media uploads
+staticfiles/
+static_root/
+media/
+
+# Test / coverage / tooling
+.coverage
+htmlcov/
+.tox/
+pytest.cache/
+.mypy_cache/
+.pytest_cache/
+
+# Editors / OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node / build junk (if any)
+node_modules/
+dist/
+build/
